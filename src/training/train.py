@@ -1,4 +1,4 @@
-from model import LinearRegression
+from src.models.linear_regression import LinearRegression
 import numpy as np
 
 

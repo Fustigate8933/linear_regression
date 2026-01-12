@@ -1,9 +1,9 @@
 from matplotlib import pyplot as plt
 import seaborn as sns
-from config import Config
-from data import load_data, train_val_split, normalize_features
-from model import LinearRegression
-from train import train
+from src.config import Config
+from src.data.preprocessing import load_data, train_val_split, normalize_features
+from src.models.linear_regression import LinearRegression
+from src.training.train import train
 import argparse
 
 config = Config()
