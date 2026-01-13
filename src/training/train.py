@@ -1,8 +1,8 @@
-from src.models.linear_regression import LinearRegression
+from src.models.base import BaseModel
 import numpy as np
 
 
-def train_one_epoch(model: LinearRegression, X: np.ndarray, y: np.ndarray, lr: float):
+def train_one_epoch(model: BaseModel, X: np.ndarray, y: np.ndarray, lr: float):
     """
     Run one epoch of training.
     """
@@ -13,7 +13,7 @@ def train_one_epoch(model: LinearRegression, X: np.ndarray, y: np.ndarray, lr: f
     return loss
 
 
-def validate(model: LinearRegression, X: np.ndarray, y: np.ndarray):
+def validate(model: BaseModel, X: np.ndarray, y: np.ndarray):
     """
     Evaluate model on validation set.
     """
@@ -23,7 +23,7 @@ def validate(model: LinearRegression, X: np.ndarray, y: np.ndarray):
 
 
 def train(
-    model: LinearRegression,
+    model: BaseModel,
     X_train,
     y_train,
     X_val,

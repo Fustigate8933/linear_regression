@@ -21,6 +21,7 @@ def load_data(path: str) -> pd.DataFrame:
         features.append(feature)
 
     data = car_data[features + ["MSRP"]].dropna().reset_index(drop=True)
+    data["Expensive"] = (data["MSRP"] > data["MSRP"].median()).astype(int)
 
     np.random.seed(config.RANDOM_SEED)
     n = len(data)
@@ -31,7 +32,7 @@ def load_data(path: str) -> pd.DataFrame:
     return data_shuffled
 
 
-def train_val_split(data: pd.DataFrame, frac: float = 0.2) -> tuple[np.ndarray, pd.Series, np.ndarray, pd.Series, np.ndarray, pd.Series]:
+def train_val_split(data: pd.DataFrame, frac: float = 0.2, categorical: bool = False) -> tuple[np.ndarray, pd.Series, np.ndarray, pd.Series, np.ndarray, pd.Series]:
     """
     Split data into training, validation, and test sets
     """
@@ -40,16 +41,18 @@ def train_val_split(data: pd.DataFrame, frac: float = 0.2) -> tuple[np.ndarray, 
     n_val = int(n * frac)
     n_train = n - n_val - n_test
     
-    data_train = data[n_train:].reset_index(drop=True)
+    data_train = data[:n_train].reset_index(drop=True)
     data_val = data[n_train: n_train + n_val].reset_index(drop=True)
     data_test = data[n_train + n_val:].reset_index(drop=True)
 
-    X_train = data_train.drop(columns=["MSRP"]).values
-    y_train = data_train["MSRP"]
-    X_val = data_val.drop(columns=["MSRP"]).values
-    y_val = data_val["MSRP"]
-    X_test = data_test.drop(columns=["MSRP"]).values
-    y_test = data_test["MSRP"]
+    target = "Expensive" if categorical else "MSRP"
+
+    X_train = data_train.drop(columns=[target]).values
+    y_train = data_train[target].values
+    X_val = data_val.drop(columns=[target]).values
+    y_val = data_val[target].values
+    X_test = data_test.drop(columns=[target]).values
+    y_test = data_test[target].values
 
     return X_train, y_train, X_val, y_val, X_test, y_test
 
